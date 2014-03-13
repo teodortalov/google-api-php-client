@@ -15,10 +15,6 @@
  * limitations under the License.
  */
 
-require_once 'Google/Client.php';
-require_once 'Google/Http/Request.php';
-require_once 'Google/Http/REST.php';
-
 /**
  * @author Chirag Shah <chirags@google.com>
  */

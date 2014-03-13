@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-require_once 'Google/Http/Request.php';
+
 
 /**
  * Implement the caching directives specified in rfc2616. This
@@ -116,7 +116,7 @@ class Google_Http_CacheParser
   public static function isExpired(Google_Http_Request $resp)
   {
     // HTTP/1.1 clients and caches MUST treat other invalid date formats,
-    // especially including the value “0”, as in the past.
+    // especially including the value as in the past.
     $parsedExpires = false;
     $responseHeaders = $resp->getResponseHeaders();
 

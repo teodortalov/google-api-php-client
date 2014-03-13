@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-require_once "Google/Cache/Abstract.php";
-require_once "Google/Cache/Exception.php";
 
 /*
  * This class implements a basic on disk storage. While that does

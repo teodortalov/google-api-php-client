@@ -15,12 +15,6 @@
  * limitations under the License.
  */
 
-require_once 'Google/Client.php';
-require_once 'Google/Exception.php';
-require_once 'Google/Utils.php';
-require_once 'Google/Http/Request.php';
-require_once 'Google/Http/MediaFileUpload.php';
-require_once 'Google/Http/REST.php';
 
 /**
  * Implements the actual methods/resources of the discovered Google API using magic function

@@ -15,17 +15,6 @@
  * limitations under the License.
  */
 
-require_once 'Google/Auth/AssertionCredentials.php';
-require_once 'Google/Cache/File.php';
-require_once 'Google/Cache/Memcache.php';
-require_once 'Google/Config.php';
-require_once 'Google/Collection.php';
-require_once 'Google/Exception.php';
-require_once 'Google/IO/Curl.php';
-require_once 'Google/IO/Stream.php';
-require_once 'Google/Model.php';
-require_once 'Google/Service.php';
-require_once 'Google/Service/Resource.php';
 
 /**
  * The Google API Client
@@ -532,7 +521,7 @@ class Google_Client
   {
     if (!isset($this->io)) {
       $class = $this->config->getIoClass();
-      $this->io = new $class($this);
+      $this->io = new \Google_IO_Curl($this);
     }
     return $this->io;
   }

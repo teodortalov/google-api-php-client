@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 
-require_once "Google/Auth/Abstract.php";
-require_once "Google/Http/Request.php";
-
 /**
  * Simple API access implementation. Can either be used to make requests
  * completely unauthenticated, or by using a Simple API Access developer
