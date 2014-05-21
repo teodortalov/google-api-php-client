@@ -41,6 +41,7 @@ class Google_Service_Games extends Google_Service
   public $applications;
   public $leaderboards;
   public $players;
+  public $pushtokens;
   public $revisions;
   public $rooms;
   public $scores;
@@ -268,6 +269,10 @@ class Google_Service_Games extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'list' => array(
               'path' => 'players/me/players/{collection}',
@@ -286,7 +291,29 @@ class Google_Service_Games extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
+            ),
+          )
+        )
+    );
+    $this->pushtokens = new Google_Service_Games_Pushtokens_Resource(
+        $this,
+        $this->serviceName,
+        'pushtokens',
+        array(
+          'methods' => array(
+            'remove' => array(
+              'path' => 'pushtokens/remove',
+              'httpMethod' => 'POST',
+              'parameters' => array(),
+            ),'update' => array(
+              'path' => 'pushtokens',
+              'httpMethod' => 'PUT',
+              'parameters' => array(),
             ),
           )
         )
@@ -335,6 +362,10 @@ class Google_Service_Games extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'dismiss' => array(
               'path' => 'rooms/{roomId}/dismiss',
@@ -369,6 +400,10 @@ class Google_Service_Games extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'leave' => array(
               'path' => 'rooms/{roomId}/leave',
@@ -378,6 +413,10 @@ class Google_Service_Games extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'list' => array(
@@ -405,6 +444,10 @@ class Google_Service_Games extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'language' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),
@@ -1058,6 +1101,9 @@ class Google_Service_Games_Players_Resource extends Google_Service_Resource
    * @param string $playerId
    * A player ID. A value of me may be used in place of the authenticated player's ID.
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_Player
    */
   public function get($playerId, $optParams = array())
@@ -1080,6 +1126,8 @@ class Google_Service_Games_Players_Resource extends Google_Service_Resource
    * The maximum number of player resources to return in the response, used for paging. For any
     * response, the actual number of player resources returned may be less than the specified
     * maxResults.
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_PlayerListResponse
    */
   public function listPlayers($collection, $optParams = array())
@@ -1087,6 +1135,45 @@ class Google_Service_Games_Players_Resource extends Google_Service_Resource
     $params = array('collection' => $collection);
     $params = array_merge($params, $optParams);
     return $this->call('list', array($params), "Google_Service_Games_PlayerListResponse");
+  }
+}
+
+/**
+ * The "pushtokens" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $gamesService = new Google_Service_Games(...);
+ *   $pushtokens = $gamesService->pushtokens;
+ *  </code>
+ */
+class Google_Service_Games_Pushtokens_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Removes a push token for the current user and application. Removing a non-
+   * existent push token will report success. (pushtokens.remove)
+   *
+   * @param Google_PushTokenId $postBody
+   * @param array $optParams Optional parameters.
+   */
+  public function remove(Google_Service_Games_PushTokenId $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('remove', array($params));
+  }
+  /**
+   * Registers a push token for the current user and application.
+   * (pushtokens.update)
+   *
+   * @param Google_PushToken $postBody
+   * @param array $optParams Optional parameters.
+   */
+  public function update(Google_Service_Games_PushToken $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('update', array($params));
   }
 }
 
@@ -1158,6 +1245,9 @@ class Google_Service_Games_Rooms_Resource extends Google_Service_Resource
    * @param string $roomId
    * The ID of the room.
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_Room
    */
   public function decline($roomId, $optParams = array())
@@ -1188,7 +1278,7 @@ class Google_Service_Games_Rooms_Resource extends Google_Service_Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string language
-   * Specify the preferred language to use to format room info.
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_Room
    */
   public function get($roomId, $optParams = array())
@@ -1205,6 +1295,9 @@ class Google_Service_Games_Rooms_Resource extends Google_Service_Resource
    * The ID of the room.
    * @param Google_RoomJoinRequest $postBody
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_Room
    */
   public function join($roomId, Google_Service_Games_RoomJoinRequest $postBody, $optParams = array())
@@ -1221,6 +1314,9 @@ class Google_Service_Games_Rooms_Resource extends Google_Service_Resource
    * The ID of the room.
    * @param Google_RoomLeaveRequest $postBody
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_Room
    */
   public function leave($roomId, Google_Service_Games_RoomLeaveRequest $postBody, $optParams = array())
@@ -1258,6 +1354,9 @@ class Google_Service_Games_Rooms_Resource extends Google_Service_Resource
    * The ID of the room.
    * @param Google_RoomP2PStatuses $postBody
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string language
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_RoomStatus
    */
   public function reportStatus($roomId, Google_Service_Games_RoomP2PStatuses $postBody, $optParams = array())
@@ -1447,7 +1546,7 @@ class Google_Service_Games_TurnBasedMatches_Resource extends Google_Service_Reso
    * @param array $optParams Optional parameters.
    *
    * @opt_param string language
-   * Specify the preferred language to use to format match info.
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_TurnBasedMatch
    */
   public function create(Google_Service_Games_TurnBasedMatchCreateRequest $postBody, $optParams = array())
@@ -1516,7 +1615,7 @@ class Google_Service_Games_TurnBasedMatches_Resource extends Google_Service_Reso
    * @param array $optParams Optional parameters.
    *
    * @opt_param string language
-   * Specify the preferred language to use to format match info.
+   * The preferred language to use for strings returned by this method.
    * @opt_param bool includeMatchData
    * Get match data along with metadata.
    * @return Google_Service_Games_TurnBasedMatch
@@ -1678,7 +1777,7 @@ class Google_Service_Games_TurnBasedMatches_Resource extends Google_Service_Reso
    * @param array $optParams Optional parameters.
    *
    * @opt_param string language
-   * Specify the preferred language to use to format match info.
+   * The preferred language to use for strings returned by this method.
    * @return Google_Service_Games_TurnBasedMatch
    */
   public function takeTurn($matchId, Google_Service_Games_TurnBasedMatchTurn $postBody, $optParams = array())
@@ -3179,7 +3278,10 @@ class Google_Service_Games_NetworkDiagnostics extends Google_Model
 {
   public $androidNetworkSubtype;
   public $androidNetworkType;
+  public $iosNetworkType;
   public $kind;
+  public $networkOperatorCode;
+  public $networkOperatorName;
   public $registrationLatencyMillis;
 
   public function setAndroidNetworkSubtype($androidNetworkSubtype)
@@ -3202,6 +3304,16 @@ class Google_Service_Games_NetworkDiagnostics extends Google_Model
     return $this->androidNetworkType;
   }
 
+  public function setIosNetworkType($iosNetworkType)
+  {
+    $this->iosNetworkType = $iosNetworkType;
+  }
+
+  public function getIosNetworkType()
+  {
+    return $this->iosNetworkType;
+  }
+
   public function setKind($kind)
   {
     $this->kind = $kind;
@@ -3210,6 +3322,26 @@ class Google_Service_Games_NetworkDiagnostics extends Google_Model
   public function getKind()
   {
     return $this->kind;
+  }
+
+  public function setNetworkOperatorCode($networkOperatorCode)
+  {
+    $this->networkOperatorCode = $networkOperatorCode;
+  }
+
+  public function getNetworkOperatorCode()
+  {
+    return $this->networkOperatorCode;
+  }
+
+  public function setNetworkOperatorName($networkOperatorName)
+  {
+    $this->networkOperatorName = $networkOperatorName;
+  }
+
+  public function getNetworkOperatorName()
+  {
+    return $this->networkOperatorName;
   }
 
   public function setRegistrationLatencyMillis($registrationLatencyMillis)
@@ -3471,6 +3603,8 @@ class Google_Service_Games_Player extends Google_Model
   public $kind;
   protected $lastPlayedWithType = 'Google_Service_Games_Played';
   protected $lastPlayedWithDataType = '';
+  protected $nameType = 'Google_Service_Games_PlayerName';
+  protected $nameDataType = '';
   public $playerId;
 
   public function setAvatarImageUrl($avatarImageUrl)
@@ -3511,6 +3645,16 @@ class Google_Service_Games_Player extends Google_Model
   public function getLastPlayedWith()
   {
     return $this->lastPlayedWith;
+  }
+
+  public function setName(Google_Service_Games_PlayerName $name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
   }
 
   public function setPlayerId($playerId)
@@ -3825,6 +3969,32 @@ class Google_Service_Games_PlayerListResponse extends Google_Collection
   }
 }
 
+class Google_Service_Games_PlayerName extends Google_Model
+{
+  public $familyName;
+  public $givenName;
+
+  public function setFamilyName($familyName)
+  {
+    $this->familyName = $familyName;
+  }
+
+  public function getFamilyName()
+  {
+    return $this->familyName;
+  }
+
+  public function setGivenName($givenName)
+  {
+    $this->givenName = $givenName;
+  }
+
+  public function getGivenName()
+  {
+    return $this->givenName;
+  }
+}
+
 class Google_Service_Games_PlayerScore extends Google_Model
 {
   public $formattedScore;
@@ -4009,6 +4179,108 @@ class Google_Service_Games_PlayerScoreSubmissionList extends Google_Collection
   }
 }
 
+class Google_Service_Games_PushToken extends Google_Model
+{
+  public $clientRevision;
+  protected $idType = 'Google_Service_Games_PushTokenId';
+  protected $idDataType = '';
+  public $kind;
+  public $language;
+
+  public function setClientRevision($clientRevision)
+  {
+    $this->clientRevision = $clientRevision;
+  }
+
+  public function getClientRevision()
+  {
+    return $this->clientRevision;
+  }
+
+  public function setId(Google_Service_Games_PushTokenId $id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setLanguage($language)
+  {
+    $this->language = $language;
+  }
+
+  public function getLanguage()
+  {
+    return $this->language;
+  }
+}
+
+class Google_Service_Games_PushTokenId extends Google_Model
+{
+  protected $iosType = 'Google_Service_Games_PushTokenIdIos';
+  protected $iosDataType = '';
+  public $kind;
+
+  public function setIos(Google_Service_Games_PushTokenIdIos $ios)
+  {
+    $this->ios = $ios;
+  }
+
+  public function getIos()
+  {
+    return $this->ios;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+}
+
+class Google_Service_Games_PushTokenIdIos extends Google_Model
+{
+  public $apnsDeviceToken;
+  public $apnsEnvironment;
+
+  public function setApnsDeviceToken($apnsDeviceToken)
+  {
+    $this->apnsDeviceToken = $apnsDeviceToken;
+  }
+
+  public function getApnsDeviceToken()
+  {
+    return $this->apnsDeviceToken;
+  }
+
+  public function setApnsEnvironment($apnsEnvironment)
+  {
+    $this->apnsEnvironment = $apnsEnvironment;
+  }
+
+  public function getApnsEnvironment()
+  {
+    return $this->apnsEnvironment;
+  }
+}
+
 class Google_Service_Games_RevisionCheckResponse extends Google_Model
 {
   public $apiVersion;
@@ -4056,6 +4328,7 @@ class Google_Service_Games_Room extends Google_Collection
   protected $creationDetailsType = 'Google_Service_Games_RoomModification';
   protected $creationDetailsDataType = '';
   public $description;
+  public $inviterId;
   public $kind;
   protected $lastUpdateDetailsType = 'Google_Service_Games_RoomModification';
   protected $lastUpdateDetailsDataType = '';
@@ -4114,6 +4387,16 @@ class Google_Service_Games_Room extends Google_Collection
   public function getDescription()
   {
     return $this->description;
+  }
+
+  public function setInviterId($inviterId)
+  {
+    $this->inviterId = $inviterId;
+  }
+
+  public function getInviterId()
+  {
+    return $this->inviterId;
   }
 
   public function setKind($kind)
@@ -4436,7 +4719,10 @@ class Google_Service_Games_RoomLeaveDiagnostics extends Google_Collection
 {
   public $androidNetworkSubtype;
   public $androidNetworkType;
+  public $iosNetworkType;
   public $kind;
+  public $networkOperatorCode;
+  public $networkOperatorName;
   protected $peerSessionType = 'Google_Service_Games_PeerSessionDiagnostics';
   protected $peerSessionDataType = 'array';
   public $socketsUsed;
@@ -4461,6 +4747,16 @@ class Google_Service_Games_RoomLeaveDiagnostics extends Google_Collection
     return $this->androidNetworkType;
   }
 
+  public function setIosNetworkType($iosNetworkType)
+  {
+    $this->iosNetworkType = $iosNetworkType;
+  }
+
+  public function getIosNetworkType()
+  {
+    return $this->iosNetworkType;
+  }
+
   public function setKind($kind)
   {
     $this->kind = $kind;
@@ -4469,6 +4765,26 @@ class Google_Service_Games_RoomLeaveDiagnostics extends Google_Collection
   public function getKind()
   {
     return $this->kind;
+  }
+
+  public function setNetworkOperatorCode($networkOperatorCode)
+  {
+    $this->networkOperatorCode = $networkOperatorCode;
+  }
+
+  public function getNetworkOperatorCode()
+  {
+    return $this->networkOperatorCode;
+  }
+
+  public function setNetworkOperatorName($networkOperatorName)
+  {
+    $this->networkOperatorName = $networkOperatorName;
+  }
+
+  public function getNetworkOperatorName()
+  {
+    return $this->networkOperatorName;
   }
 
   public function setPeerSession($peerSession)
@@ -5007,6 +5323,8 @@ class Google_Service_Games_TurnBasedMatch extends Google_Collection
   protected $creationDetailsDataType = '';
   protected $dataType = 'Google_Service_Games_TurnBasedMatchData';
   protected $dataDataType = '';
+  public $description;
+  public $inviterId;
   public $kind;
   protected $lastUpdateDetailsType = 'Google_Service_Games_TurnBasedMatchModification';
   protected $lastUpdateDetailsDataType = '';
@@ -5024,6 +5342,7 @@ class Google_Service_Games_TurnBasedMatch extends Google_Collection
   public $status;
   public $userMatchStatus;
   public $variant;
+  public $withParticipantId;
 
   public function setApplicationId($applicationId)
   {
@@ -5063,6 +5382,26 @@ class Google_Service_Games_TurnBasedMatch extends Google_Collection
   public function getData()
   {
     return $this->data;
+  }
+
+  public function setDescription($description)
+  {
+    $this->description = $description;
+  }
+
+  public function getDescription()
+  {
+    return $this->description;
+  }
+
+  public function setInviterId($inviterId)
+  {
+    $this->inviterId = $inviterId;
+  }
+
+  public function getInviterId()
+  {
+    return $this->inviterId;
   }
 
   public function setKind($kind)
@@ -5193,6 +5532,16 @@ class Google_Service_Games_TurnBasedMatch extends Google_Collection
   public function getVariant()
   {
     return $this->variant;
+  }
+
+  public function setWithParticipantId($withParticipantId)
+  {
+    $this->withParticipantId = $withParticipantId;
+  }
+
+  public function getWithParticipantId()
+  {
+    return $this->withParticipantId;
   }
 }
 

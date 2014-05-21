@@ -43,6 +43,7 @@ class Google_Service_Analytics extends Google_Service
   public $data_ga;
   public $data_mcf;
   public $data_realtime;
+  public $management_accountSummaries;
   public $management_accountUserLinks;
   public $management_accounts;
   public $management_customDataSources;
@@ -231,6 +232,29 @@ class Google_Service_Analytics extends Google_Service
                 'filters' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->management_accountSummaries = new Google_Service_Analytics_ManagementAccountSummaries_Resource(
+        $this,
+        $this->serviceName,
+        'accountSummaries',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'management/accountSummaries',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'max-results' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'start-index' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),
@@ -1364,22 +1388,22 @@ class Google_Service_Analytics_DataGa_Resource extends Google_Service_Resource
     * MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is
     * yesterday.
    * @param string $metrics
-   * A comma-separated list of Analytics metrics. E.g., 'ga:visits,ga:pageviews'. At least one metric
-    * must be specified.
+   * A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one
+    * metric must be specified.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of entries to include in this feed.
    * @opt_param string sort
    * A comma-separated list of dimensions or metrics that determine the sort order for Analytics
     * data.
    * @opt_param string dimensions
    * A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @opt_param string segment
-   * An Analytics advanced segment to be applied to data.
+   * An Analytics segment to be applied to data.
    * @opt_param string samplingLevel
    * The desired sampling level.
    * @opt_param string filters
@@ -1423,14 +1447,14 @@ class Google_Service_Analytics_DataMcf_Resource extends Google_Service_Resource
     * 'mcf:totalConversions,mcf:totalConversionValue'. At least one metric must be specified.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of entries to include in this feed.
    * @opt_param string sort
    * A comma-separated list of dimensions or metrics that determine the sort order for the Analytics
     * data.
    * @opt_param string dimensions
    * A comma-separated list of Multi-Channel Funnels dimensions. E.g., 'mcf:source,mcf:medium'.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @opt_param string samplingLevel
@@ -1464,11 +1488,11 @@ class Google_Service_Analytics_DataRealtime_Resource extends Google_Service_Reso
    * Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is
     * the Analytics view (profile) ID.
    * @param string $metrics
-   * A comma-separated list of real time metrics. E.g., 'rt:activeVisitors'. At least one metric must
-    * be specified.
+   * A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be
+    * specified.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of entries to include in this feed.
    * @opt_param string sort
    * A comma-separated list of dimensions or metrics that determine the sort order for real time
@@ -1500,6 +1524,38 @@ class Google_Service_Analytics_Management_Resource extends Google_Service_Resour
 
 }
 
+/**
+ * The "accountSummaries" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $analyticsService = new Google_Service_Analytics(...);
+ *   $accountSummaries = $analyticsService->accountSummaries;
+ *  </code>
+ */
+class Google_Service_Analytics_ManagementAccountSummaries_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Lists account summaries (lightweight tree comprised of
+   * accounts/properties/profiles) to which the user has access.
+   * (accountSummaries.listManagementAccountSummaries)
+   *
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param int max-results
+   * The maximum number of filters to include in this response.
+   * @opt_param int start-index
+   * An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
+    * with the max-results parameter.
+   * @return Google_Service_Analytics_AccountSummaries
+   */
+  public function listManagementAccountSummaries($optParams = array())
+  {
+    $params = array();
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_Analytics_AccountSummaries");
+  }
+}
 /**
  * The "accountUserLinks" collection of methods.
  * Typical usage is:
@@ -1549,9 +1605,9 @@ class Google_Service_Analytics_ManagementAccountUserLinks_Resource extends Googl
    * Account ID to retrieve the user links for.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of account-user links to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first account-user link to retrieve. Use this parameter as a pagination
     * mechanism along with the max-results parameter.
    * @return Google_Service_Analytics_EntityUserLinks
@@ -1598,9 +1654,9 @@ class Google_Service_Analytics_ManagementAccounts_Resource extends Google_Servic
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of accounts to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first account to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @return Google_Service_Analytics_Accounts
@@ -1633,9 +1689,9 @@ class Google_Service_Analytics_ManagementCustomDataSources_Resource extends Goog
    * Web property Id for the custom data sources to retrieve.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of custom data sources to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * A 1-based index of the first custom data source to retrieve. Use this parameter as a pagination
     * mechanism along with the max-results parameter.
    * @return Google_Service_Analytics_CustomDataSources
@@ -1695,9 +1751,9 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
    * End date of the form YYYY-MM-DD.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of custom data sources to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * A 1-based index of the first daily upload to retrieve. Use this parameter as a pagination
     * mechanism along with the max-results parameter.
    * @return Google_Service_Analytics_DailyUploads
@@ -1818,9 +1874,9 @@ class Google_Service_Analytics_ManagementExperiments_Resource extends Google_Ser
    * View (Profile) ID to retrieve experiments for.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of experiments to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first experiment to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @return Google_Service_Analytics_Experiments
@@ -1939,9 +1995,9 @@ class Google_Service_Analytics_ManagementGoals_Resource extends Google_Service_R
     * which refers to all the views (profiles) that user has access to.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of goals to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first goal to retrieve. Use this parameter as a pagination mechanism along with
     * the max-results parameter.
    * @return Google_Service_Analytics_Goals
@@ -2057,9 +2113,9 @@ class Google_Service_Analytics_ManagementProfileUserLinks_Resource extends Googl
    * View (Profile) ID to retrieve the profile-user links for
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of profile-user links to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first profile-user link to retrieve. Use this parameter as a pagination
     * mechanism along with the max-results parameter.
    * @return Google_Service_Analytics_EntityUserLinks
@@ -2168,9 +2224,9 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
     * or '~all', which refers to all the web properties to which the user has access.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of views (profiles) to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @return Google_Service_Analytics_Profiles
@@ -2233,16 +2289,16 @@ class Google_Service_Analytics_ManagementSegments_Resource extends Google_Servic
 {
 
   /**
-   * Lists advanced segments to which the user has access.
+   * Lists segments to which the user has access.
    * (segments.listManagementSegments)
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
-   * The maximum number of advanced segments to include in this response.
-   * @opt_param int startIndex
-   * An index of the first advanced segment to retrieve. Use this parameter as a pagination mechanism
-    * along with the max-results parameter.
+   * @opt_param int max-results
+   * The maximum number of segments to include in this response.
+   * @opt_param int start-index
+   * An index of the first segment to retrieve. Use this parameter as a pagination mechanism along
+    * with the max-results parameter.
    * @return Google_Service_Analytics_Segments
    */
   public function listManagementSegments($optParams = array())
@@ -2312,9 +2368,9 @@ class Google_Service_Analytics_ManagementUploads_Resource extends Google_Service
    * Custom data source Id for uploads to retrieve.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of uploads to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * A 1-based index of the first upload to retrieve. Use this parameter as a pagination mechanism
     * along with the max-results parameter.
    * @return Google_Service_Analytics_Uploads
@@ -2397,9 +2453,9 @@ class Google_Service_Analytics_ManagementWebproperties_Resource extends Google_S
     * refers to all the accounts that user has access to.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of web properties to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
     * with the max-results parameter.
    * @return Google_Service_Analytics_Webproperties
@@ -2501,9 +2557,9 @@ class Google_Service_Analytics_ManagementWebpropertyUserLinks_Resource extends G
    * Web Property ID for the webProperty-user links to retrieve.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults
+   * @opt_param int max-results
    * The maximum number of webProperty-user Links to include in this response.
-   * @opt_param int startIndex
+   * @opt_param int start-index
    * An index of the first webProperty-user link to retrieve. Use this parameter as a pagination
     * mechanism along with the max-results parameter.
    * @return Google_Service_Analytics_EntityUserLinks
@@ -2759,6 +2815,148 @@ class Google_Service_Analytics_AccountRef extends Google_Model
   public function getName()
   {
     return $this->name;
+  }
+}
+
+class Google_Service_Analytics_AccountSummaries extends Google_Collection
+{
+  protected $itemsType = 'Google_Service_Analytics_AccountSummary';
+  protected $itemsDataType = 'array';
+  public $itemsPerPage;
+  public $kind;
+  public $nextLink;
+  public $previousLink;
+  public $startIndex;
+  public $totalResults;
+  public $username;
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+
+  public function getItems()
+  {
+    return $this->items;
+  }
+
+  public function setItemsPerPage($itemsPerPage)
+  {
+    $this->itemsPerPage = $itemsPerPage;
+  }
+
+  public function getItemsPerPage()
+  {
+    return $this->itemsPerPage;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setNextLink($nextLink)
+  {
+    $this->nextLink = $nextLink;
+  }
+
+  public function getNextLink()
+  {
+    return $this->nextLink;
+  }
+
+  public function setPreviousLink($previousLink)
+  {
+    $this->previousLink = $previousLink;
+  }
+
+  public function getPreviousLink()
+  {
+    return $this->previousLink;
+  }
+
+  public function setStartIndex($startIndex)
+  {
+    $this->startIndex = $startIndex;
+  }
+
+  public function getStartIndex()
+  {
+    return $this->startIndex;
+  }
+
+  public function setTotalResults($totalResults)
+  {
+    $this->totalResults = $totalResults;
+  }
+
+  public function getTotalResults()
+  {
+    return $this->totalResults;
+  }
+
+  public function setUsername($username)
+  {
+    $this->username = $username;
+  }
+
+  public function getUsername()
+  {
+    return $this->username;
+  }
+}
+
+class Google_Service_Analytics_AccountSummary extends Google_Collection
+{
+  public $id;
+  public $kind;
+  public $name;
+  protected $webPropertiesType = 'Google_Service_Analytics_WebPropertySummary';
+  protected $webPropertiesDataType = 'array';
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function setWebProperties($webProperties)
+  {
+    $this->webProperties = $webProperties;
+  }
+
+  public function getWebProperties()
+  {
+    return $this->webProperties;
   }
 }
 
@@ -5879,6 +6077,8 @@ class Google_Service_Analytics_Profile extends Google_Model
   public $selfLink;
   public $siteSearchCategoryParameters;
   public $siteSearchQueryParameters;
+  public $stripSiteSearchCategoryParameters;
+  public $stripSiteSearchQueryParameters;
   public $timezone;
   public $type;
   public $updated;
@@ -6043,6 +6243,26 @@ class Google_Service_Analytics_Profile extends Google_Model
   public function getSiteSearchQueryParameters()
   {
     return $this->siteSearchQueryParameters;
+  }
+
+  public function setStripSiteSearchCategoryParameters($stripSiteSearchCategoryParameters)
+  {
+    $this->stripSiteSearchCategoryParameters = $stripSiteSearchCategoryParameters;
+  }
+
+  public function getStripSiteSearchCategoryParameters()
+  {
+    return $this->stripSiteSearchCategoryParameters;
+  }
+
+  public function setStripSiteSearchQueryParameters($stripSiteSearchQueryParameters)
+  {
+    $this->stripSiteSearchQueryParameters = $stripSiteSearchQueryParameters;
+  }
+
+  public function getStripSiteSearchQueryParameters()
+  {
+    return $this->stripSiteSearchQueryParameters;
   }
 
   public function setTimezone($timezone)
@@ -6241,6 +6461,54 @@ class Google_Service_Analytics_ProfileRef extends Google_Model
   public function getWebPropertyId()
   {
     return $this->webPropertyId;
+  }
+}
+
+class Google_Service_Analytics_ProfileSummary extends Google_Model
+{
+  public $id;
+  public $kind;
+  public $name;
+  public $type;
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function setType($type)
+  {
+    $this->type = $type;
+  }
+
+  public function getType()
+  {
+    return $this->type;
   }
 }
 
@@ -6629,6 +6897,7 @@ class Google_Service_Analytics_Segment extends Google_Model
   public $name;
   public $segmentId;
   public $selfLink;
+  public $type;
   public $updated;
 
   public function setCreated($created)
@@ -6699,6 +6968,16 @@ class Google_Service_Analytics_Segment extends Google_Model
   public function getSelfLink()
   {
     return $this->selfLink;
+  }
+
+  public function setType($type)
+  {
+    $this->type = $type;
+  }
+
+  public function getType()
+  {
+    return $this->type;
   }
 
   public function setUpdated($updated)
@@ -7061,6 +7340,88 @@ class Google_Service_Analytics_WebPropertyRef extends Google_Model
   public function getName()
   {
     return $this->name;
+  }
+}
+
+class Google_Service_Analytics_WebPropertySummary extends Google_Collection
+{
+  public $id;
+  public $internalWebPropertyId;
+  public $kind;
+  public $level;
+  public $name;
+  protected $profilesType = 'Google_Service_Analytics_ProfileSummary';
+  protected $profilesDataType = 'array';
+  public $websiteUrl;
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setInternalWebPropertyId($internalWebPropertyId)
+  {
+    $this->internalWebPropertyId = $internalWebPropertyId;
+  }
+
+  public function getInternalWebPropertyId()
+  {
+    return $this->internalWebPropertyId;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setLevel($level)
+  {
+    $this->level = $level;
+  }
+
+  public function getLevel()
+  {
+    return $this->level;
+  }
+
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function setProfiles($profiles)
+  {
+    $this->profiles = $profiles;
+  }
+
+  public function getProfiles()
+  {
+    return $this->profiles;
+  }
+
+  public function setWebsiteUrl($websiteUrl)
+  {
+    $this->websiteUrl = $websiteUrl;
+  }
+
+  public function getWebsiteUrl()
+  {
+    return $this->websiteUrl;
   }
 }
 

@@ -44,8 +44,11 @@ class Google_Service_YouTube extends Google_Service
 
   public $activities;
   public $channelBanners;
+  public $channelSections;
   public $channels;
   public $guideCategories;
+  public $i18nLanguages;
+  public $i18nRegions;
   public $liveBroadcasts;
   public $liveStreams;
   public $playlistItems;
@@ -151,6 +154,80 @@ class Google_Service_YouTube extends Google_Service
           )
         )
     );
+    $this->channelSections = new Google_Service_YouTube_ChannelSections_Resource(
+        $this,
+        $this->serviceName,
+        'channelSections',
+        array(
+          'methods' => array(
+            'delete' => array(
+              'path' => 'channelSections',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'id' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'insert' => array(
+              'path' => 'channelSections',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'part' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'onBehalfOfContentOwnerChannel' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'channelSections',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'part' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'channelId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'id' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'mine' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'channelSections',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'part' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
     $this->channels = new Google_Service_YouTube_Channels_Resource(
         $this,
         $this->serviceName,
@@ -243,6 +320,54 @@ class Google_Service_YouTube extends Google_Service
                 'id' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'hl' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->i18nLanguages = new Google_Service_YouTube_I18nLanguages_Resource(
+        $this,
+        $this->serviceName,
+        'i18nLanguages',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'i18nLanguages',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'part' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'hl' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->i18nRegions = new Google_Service_YouTube_I18nRegions_Resource(
+        $this,
+        $this->serviceName,
+        'i18nRegions',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'i18nRegions',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'part' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
                 ),
                 'hl' => array(
                   'location' => 'query',
@@ -1305,6 +1430,139 @@ class Google_Service_YouTube_ChannelBanners_Resource extends Google_Service_Reso
 }
 
 /**
+ * The "channelSections" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubeService = new Google_Service_YouTube(...);
+ *   $channelSections = $youtubeService->channelSections;
+ *  </code>
+ */
+class Google_Service_YouTube_ChannelSections_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Deletes a channelSection. (channelSections.delete)
+   *
+   * @param string $id
+   * The id parameter specifies the YouTube channelSection ID for the resource that is being deleted.
+    * In a channelSection resource, the id property specifies the YouTube channelSection ID.
+   * @param array $optParams Optional parameters.
+   */
+  public function delete($id, $optParams = array())
+  {
+    $params = array('id' => $id);
+    $params = array_merge($params, $optParams);
+    return $this->call('delete', array($params));
+  }
+  /**
+   * Adds a channelSection for the authenticated user's channel.
+   * (channelSections.insert)
+   *
+   * @param string $part
+   * The part parameter serves two purposes in this operation. It identifies the properties that the
+    * write operation will set as well as the properties that the API response will include.
+  The part
+    * names that you can include in the parameter value are snippet and contentDetails.
+   * @param Google_ChannelSection $postBody
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwnerChannel
+   * This parameter can only be used in a properly authorized request. Note: This parameter is
+    * intended exclusively for YouTube content partners.
+  The onBehalfOfContentOwnerChannel parameter
+    * specifies the YouTube channel ID of the channel to which a video is being added. This parameter
+    * is required when a request specifies a value for the onBehalfOfContentOwner parameter, and it
+    * can only be used in conjunction with that parameter. In addition, the request must be authorized
+    * using a CMS account that is linked to the content owner that the onBehalfOfContentOwner
+    * parameter specifies. Finally, the channel that the onBehalfOfContentOwnerChannel parameter value
+    * specifies must be linked to the content owner that the onBehalfOfContentOwner parameter
+    * specifies.
+  This parameter is intended for YouTube content partners that own and manage many
+    * different YouTube channels. It allows content owners to authenticate once and perform actions on
+    * behalf of the channel specified in the parameter value, without having to provide authentication
+    * credentials for each separate channel.
+   * @opt_param string onBehalfOfContentOwner
+   * Note: This parameter is intended exclusively for YouTube content partners.
+  The
+    * onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify
+    * a YouTube CMS user who is acting on behalf of the content owner specified in the parameter
+    * value. This parameter is intended for YouTube content partners that own and manage many
+    * different YouTube channels. It allows content owners to authenticate once and get access to all
+    * their video and channel data, without having to provide authentication credentials for each
+    * individual channel. The CMS account that the user authenticates with must be linked to the
+    * specified YouTube content owner.
+   * @return Google_Service_YouTube_ChannelSection
+   */
+  public function insert($part, Google_Service_YouTube_ChannelSection $postBody, $optParams = array())
+  {
+    $params = array('part' => $part, 'postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('insert', array($params), "Google_Service_YouTube_ChannelSection");
+  }
+  /**
+   * Returns channelSection resources that match the API request criteria.
+   * (channelSections.listChannelSections)
+   *
+   * @param string $part
+   * The part parameter specifies a comma-separated list of one or more channelSection resource
+    * properties that the API response will include. The part names that you can include in the
+    * parameter value are id, snippet, and contentDetails.
+  If the parameter identifies a property
+    * that contains child properties, the child properties will be included in the response. For
+    * example, in a channelSection resource, the snippet property contains other properties, such as a
+    * display title for the channelSection. If you set part=snippet, the API response will also
+    * contain all of those nested properties.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner
+   * Note: This parameter is intended exclusively for YouTube content partners.
+  The
+    * onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify
+    * a YouTube CMS user who is acting on behalf of the content owner specified in the parameter
+    * value. This parameter is intended for YouTube content partners that own and manage many
+    * different YouTube channels. It allows content owners to authenticate once and get access to all
+    * their video and channel data, without having to provide authentication credentials for each
+    * individual channel. The CMS account that the user authenticates with must be linked to the
+    * specified YouTube content owner.
+   * @opt_param string channelId
+   * The channelId parameter specifies a YouTube channel ID. The API will only return that channel's
+    * channelSections.
+   * @opt_param string id
+   * The id parameter specifies a comma-separated list of the YouTube channelSection ID(s) for the
+    * resource(s) that are being retrieved. In a channelSection resource, the id property specifies
+    * the YouTube channelSection ID.
+   * @opt_param bool mine
+   * Set this parameter's value to true to retrieve a feed of the authenticated user's
+    * channelSections.
+   * @return Google_Service_YouTube_ChannelSectionListResponse
+   */
+  public function listChannelSections($part, $optParams = array())
+  {
+    $params = array('part' => $part);
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTube_ChannelSectionListResponse");
+  }
+  /**
+   * Update a channelSection. (channelSections.update)
+   *
+   * @param string $part
+   * The part parameter serves two purposes in this operation. It identifies the properties that the
+    * write operation will set as well as the properties that the API response will include.
+  The part
+    * names that you can include in the parameter value are snippet and contentDetails.
+   * @param Google_ChannelSection $postBody
+   * @param array $optParams Optional parameters.
+   * @return Google_Service_YouTube_ChannelSection
+   */
+  public function update($part, Google_Service_YouTube_ChannelSection $postBody, $optParams = array())
+  {
+    $params = array('part' => $part, 'postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('update', array($params), "Google_Service_YouTube_ChannelSection");
+  }
+}
+
+/**
  * The "channels" collection of methods.
  * Typical usage is:
  *  <code>
@@ -1446,6 +1704,70 @@ class Google_Service_YouTube_GuideCategories_Resource extends Google_Service_Res
     $params = array('part' => $part);
     $params = array_merge($params, $optParams);
     return $this->call('list', array($params), "Google_Service_YouTube_GuideCategoryListResponse");
+  }
+}
+
+/**
+ * The "i18nLanguages" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubeService = new Google_Service_YouTube(...);
+ *   $i18nLanguages = $youtubeService->i18nLanguages;
+ *  </code>
+ */
+class Google_Service_YouTube_I18nLanguages_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Returns a list of supported languages. (i18nLanguages.listI18nLanguages)
+   *
+   * @param string $part
+   * The part parameter specifies a comma-separated list of one or more i18nLanguage resource
+    * properties that the API response will include. The part names that you can include in the
+    * parameter value are id and snippet.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string hl
+   * The hl parameter specifies the language that should be used for text values in the API response.
+   * @return Google_Service_YouTube_I18nLanguageListResponse
+   */
+  public function listI18nLanguages($part, $optParams = array())
+  {
+    $params = array('part' => $part);
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTube_I18nLanguageListResponse");
+  }
+}
+
+/**
+ * The "i18nRegions" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubeService = new Google_Service_YouTube(...);
+ *   $i18nRegions = $youtubeService->i18nRegions;
+ *  </code>
+ */
+class Google_Service_YouTube_I18nRegions_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Returns a list of supported regions. (i18nRegions.listI18nRegions)
+   *
+   * @param string $part
+   * The part parameter specifies a comma-separated list of one or more i18nRegion resource
+    * properties that the API response will include. The part names that you can include in the
+    * parameter value are id and snippet.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string hl
+   * The hl parameter specifies the language that should be used for text values in the API response.
+   * @return Google_Service_YouTube_I18nRegionListResponse
+   */
+  public function listI18nRegions($part, $optParams = array())
+  {
+    $params = array('part' => $part);
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTube_I18nRegionListResponse");
   }
 }
 
@@ -2253,12 +2575,12 @@ class Google_Service_YouTube_Playlists_Resource extends Google_Service_Resource
    * @param string $part
    * The part parameter specifies a comma-separated list of one or more playlist resource properties
     * that the API response will include. The part names that you can include in the parameter value
-    * are id, snippet, and status.
-  If the parameter identifies a property that contains child
-    * properties, the child properties will be included in the response. For example, in a playlist
-    * resource, the snippet property contains properties like author, title, description, tags, and
-    * timeCreated. As such, if you set part=snippet, the API response will contain all of those
-    * properties.
+    * are id, snippet, status, and contentDetails.
+  If the parameter identifies a property that
+    * contains child properties, the child properties will be included in the response. For example,
+    * in a playlist resource, the snippet property contains properties like author, title,
+    * description, tags, and timeCreated. As such, if you set part=snippet, the API response will
+    * contain all of those properties.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string onBehalfOfContentOwner
@@ -4366,6 +4688,212 @@ class Google_Service_YouTube_ChannelListResponse extends Google_Collection
   }
 }
 
+class Google_Service_YouTube_ChannelSection extends Google_Model
+{
+  protected $contentDetailsType = 'Google_Service_YouTube_ChannelSectionContentDetails';
+  protected $contentDetailsDataType = '';
+  public $etag;
+  public $id;
+  public $kind;
+  protected $snippetType = 'Google_Service_YouTube_ChannelSectionSnippet';
+  protected $snippetDataType = '';
+
+  public function setContentDetails(Google_Service_YouTube_ChannelSectionContentDetails $contentDetails)
+  {
+    $this->contentDetails = $contentDetails;
+  }
+
+  public function getContentDetails()
+  {
+    return $this->contentDetails;
+  }
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setSnippet(Google_Service_YouTube_ChannelSectionSnippet $snippet)
+  {
+    $this->snippet = $snippet;
+  }
+
+  public function getSnippet()
+  {
+    return $this->snippet;
+  }
+}
+
+class Google_Service_YouTube_ChannelSectionContentDetails extends Google_Collection
+{
+  public $channels;
+  public $playlists;
+
+  public function setChannels($channels)
+  {
+    $this->channels = $channels;
+  }
+
+  public function getChannels()
+  {
+    return $this->channels;
+  }
+
+  public function setPlaylists($playlists)
+  {
+    $this->playlists = $playlists;
+  }
+
+  public function getPlaylists()
+  {
+    return $this->playlists;
+  }
+}
+
+class Google_Service_YouTube_ChannelSectionListResponse extends Google_Collection
+{
+  public $etag;
+  public $eventId;
+  protected $itemsType = 'Google_Service_YouTube_ChannelSection';
+  protected $itemsDataType = 'array';
+  public $kind;
+  public $visitorId;
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setEventId($eventId)
+  {
+    $this->eventId = $eventId;
+  }
+
+  public function getEventId()
+  {
+    return $this->eventId;
+  }
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+
+  public function getItems()
+  {
+    return $this->items;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setVisitorId($visitorId)
+  {
+    $this->visitorId = $visitorId;
+  }
+
+  public function getVisitorId()
+  {
+    return $this->visitorId;
+  }
+}
+
+class Google_Service_YouTube_ChannelSectionSnippet extends Google_Model
+{
+  public $channelId;
+  public $position;
+  public $style;
+  public $title;
+  public $type;
+
+  public function setChannelId($channelId)
+  {
+    $this->channelId = $channelId;
+  }
+
+  public function getChannelId()
+  {
+    return $this->channelId;
+  }
+
+  public function setPosition($position)
+  {
+    $this->position = $position;
+  }
+
+  public function getPosition()
+  {
+    return $this->position;
+  }
+
+  public function setStyle($style)
+  {
+    $this->style = $style;
+  }
+
+  public function getStyle()
+  {
+    return $this->style;
+  }
+
+  public function setTitle($title)
+  {
+    $this->title = $title;
+  }
+
+  public function getTitle()
+  {
+    return $this->title;
+  }
+
+  public function setType($type)
+  {
+    $this->type = $type;
+  }
+
+  public function getType()
+  {
+    return $this->type;
+  }
+}
+
 class Google_Service_YouTube_ChannelSettings extends Google_Collection
 {
   public $defaultTab;
@@ -5079,6 +5607,276 @@ class Google_Service_YouTube_GuideCategorySnippet extends Google_Model
   public function getTitle()
   {
     return $this->title;
+  }
+}
+
+class Google_Service_YouTube_I18nLanguage extends Google_Model
+{
+  public $etag;
+  public $id;
+  public $kind;
+  protected $snippetType = 'Google_Service_YouTube_I18nLanguageSnippet';
+  protected $snippetDataType = '';
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setSnippet(Google_Service_YouTube_I18nLanguageSnippet $snippet)
+  {
+    $this->snippet = $snippet;
+  }
+
+  public function getSnippet()
+  {
+    return $this->snippet;
+  }
+}
+
+class Google_Service_YouTube_I18nLanguageListResponse extends Google_Collection
+{
+  public $etag;
+  public $eventId;
+  protected $itemsType = 'Google_Service_YouTube_I18nLanguage';
+  protected $itemsDataType = 'array';
+  public $kind;
+  public $visitorId;
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setEventId($eventId)
+  {
+    $this->eventId = $eventId;
+  }
+
+  public function getEventId()
+  {
+    return $this->eventId;
+  }
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+
+  public function getItems()
+  {
+    return $this->items;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setVisitorId($visitorId)
+  {
+    $this->visitorId = $visitorId;
+  }
+
+  public function getVisitorId()
+  {
+    return $this->visitorId;
+  }
+}
+
+class Google_Service_YouTube_I18nLanguageSnippet extends Google_Model
+{
+  public $hl;
+  public $name;
+
+  public function setHl($hl)
+  {
+    $this->hl = $hl;
+  }
+
+  public function getHl()
+  {
+    return $this->hl;
+  }
+
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+}
+
+class Google_Service_YouTube_I18nRegion extends Google_Model
+{
+  public $etag;
+  public $id;
+  public $kind;
+  protected $snippetType = 'Google_Service_YouTube_I18nRegionSnippet';
+  protected $snippetDataType = '';
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setSnippet(Google_Service_YouTube_I18nRegionSnippet $snippet)
+  {
+    $this->snippet = $snippet;
+  }
+
+  public function getSnippet()
+  {
+    return $this->snippet;
+  }
+}
+
+class Google_Service_YouTube_I18nRegionListResponse extends Google_Collection
+{
+  public $etag;
+  public $eventId;
+  protected $itemsType = 'Google_Service_YouTube_I18nRegion';
+  protected $itemsDataType = 'array';
+  public $kind;
+  public $visitorId;
+
+  public function setEtag($etag)
+  {
+    $this->etag = $etag;
+  }
+
+  public function getEtag()
+  {
+    return $this->etag;
+  }
+
+  public function setEventId($eventId)
+  {
+    $this->eventId = $eventId;
+  }
+
+  public function getEventId()
+  {
+    return $this->eventId;
+  }
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+
+  public function getItems()
+  {
+    return $this->items;
+  }
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+
+  public function getKind()
+  {
+    return $this->kind;
+  }
+
+  public function setVisitorId($visitorId)
+  {
+    $this->visitorId = $visitorId;
+  }
+
+  public function getVisitorId()
+  {
+    return $this->visitorId;
+  }
+}
+
+class Google_Service_YouTube_I18nRegionSnippet extends Google_Model
+{
+  public $gl;
+  public $name;
+
+  public function setGl($gl)
+  {
+    $this->gl = $gl;
+  }
+
+  public function getGl()
+  {
+    return $this->gl;
+  }
+
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->name;
   }
 }
 
@@ -9400,6 +10198,7 @@ class Google_Service_YouTube_VideoStatus extends Google_Model
   public $license;
   public $privacyStatus;
   public $publicStatsViewable;
+  public $publishAt;
   public $rejectionReason;
   public $uploadStatus;
 
@@ -9451,6 +10250,16 @@ class Google_Service_YouTube_VideoStatus extends Google_Model
   public function getPublicStatsViewable()
   {
     return $this->publicStatsViewable;
+  }
+
+  public function setPublishAt($publishAt)
+  {
+    $this->publishAt = $publishAt;
+  }
+
+  public function getPublishAt()
+  {
+    return $this->publishAt;
   }
 
   public function setRejectionReason($rejectionReason)

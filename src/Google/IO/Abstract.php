@@ -33,6 +33,10 @@ abstract class Google_IO_Abstract
   public function __construct(Google_Client $client)
   {
     $this->client = $client;
+    $timeout = $client->getClassConfig('Google_IO_Abstract', 'request_timeout_seconds');
+    if ($timeout > 0) {
+      $this->setTimeout($timeout);
+    }
   }
 
   /**
@@ -47,6 +51,29 @@ abstract class Google_IO_Abstract
    * @param $options
    */
   abstract public function setOptions($options);
+  
+  /**
+   * Set the maximum request time in seconds.
+   * @param $timeout in seconds
+   */
+  abstract public function setTimeout($timeout);
+  
+  /**
+   * Get the maximum request time in seconds.
+   * @return timeout in seconds
+   */
+  abstract public function getTimeout();
+
+  /**
+   * Test for the presence of a cURL header processing bug
+   *
+   * The cURL bug was present in versions prior to 7.30.0 and caused the header
+   * length to be miscalculated when a "Connection established" header added by
+   * some proxies was present.
+   *
+   * @return boolean
+   */
+  abstract protected function needsQuirk();
 
   /**
    * @visible for testing.
@@ -78,7 +105,7 @@ abstract class Google_IO_Abstract
   {
     // First, check to see if we have a valid cached version.
     $cached = $this->getCachedRequest($request);
-    if ($cached !== false) {
+    if ($cached !== false && $cached instanceof Google_Http_Request) {
       if (!$this->checkMustRevalidateCachedRequest($cached, $request)) {
         return $cached;
       }
@@ -220,6 +247,13 @@ abstract class Google_IO_Abstract
   {
     if (stripos($respData, self::CONNECTION_ESTABLISHED) !== false) {
       $respData = str_ireplace(self::CONNECTION_ESTABLISHED, '', $respData);
+
+      // Subtract the proxy header size unless the cURL bug prior to 7.30.0
+      // is present which prevented the proxy header size from being taken into
+      // account.
+      if (!$this->needsQuirk()) {
+        $headerSize -= strlen(self::CONNECTION_ESTABLISHED);
+      }
     }
 
     if ($headerSize) {
@@ -250,7 +284,6 @@ abstract class Google_IO_Abstract
   private function parseStringHeaders($rawHeaders)
   {
     $headers = array();
-
     $responseHeaderLines = explode("\r\n", $rawHeaders);
     foreach ($responseHeaderLines as $headerLine) {
       if ($headerLine && strpos($headerLine, ':') !== false) {

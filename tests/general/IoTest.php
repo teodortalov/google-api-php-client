@@ -25,15 +25,22 @@ require_once 'Google/IO/Stream.php';
 
 class IoTest extends BaseTest
 {
-  
+
   public function testExecutorSelection()
   {
+    $default = function_exists('curl_version') ? 'Google_IO_Curl' : 'Google_IO_Stream';
     $client = $this->getClient();
-    $this->assertInstanceOf('Google_IO_Curl', $client->getIo());
+    $this->assertInstanceOf($default, $client->getIo());
     $config = new Google_Config();
     $config->setIoClass('Google_IO_Stream');
     $client = new Google_Client($config);
     $this->assertInstanceOf('Google_IO_Stream', $client->getIo());
+  }
+
+  public function testStreamSetTimeout()
+  {
+    $io = new Google_IO_Stream($this->getClient());
+    $this->timeoutChecker($io);
   }
 
   public function testStreamParseHttpResponseBody()
@@ -71,31 +78,52 @@ class IoTest extends BaseTest
     $io = new Google_IO_Stream($this->getClient());
     $this->invalidRequest($io);
   }
-  
+
+  public function testCurlSetTimeout()
+  {
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
+    $io = new Google_IO_Curl($this->getClient());
+    $this->timeoutChecker($io);
+  }
+
   public function testCurlParseHttpResponseBody()
   {
-    $io = new Google_IO_Stream($this->getClient());
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
+    $io = new Google_IO_Curl($this->getClient());
     $this->responseChecker($io);
   }
 
   public function testCurlProcessEntityRequest()
   {
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
     $client = $this->getClient();
-    $io = new Google_IO_Stream($client);
+    $io = new Google_IO_Curl($client);
     $this->processEntityRequest($io, $client);
   }
 
   public function testCurlCacheHit()
   {
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
     $client = $this->getClient();
-    $io = new Google_IO_Stream($client);
+    $io = new Google_IO_Curl($client);
     $this->cacheHit($io, $client);
   }
 
   public function testCurlAuthCache()
   {
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
     $client = $this->getClient();
-    $io = new Google_IO_Stream($client);
+    $io = new Google_IO_Curl($client);
     $this->authCache($io, $client);
   }
 
@@ -104,12 +132,21 @@ class IoTest extends BaseTest
    */
   public function testCurlInvalidRequest()
   {
-    $io = new Google_IO_Stream($this->getClient());
+    if (!function_exists('curl_version')) {
+      $this->markTestSkipped('cURL not present');
+    }
+    $io = new Google_IO_Curl($this->getClient());
     $this->invalidRequest($io);
   }
 
   // Asserting Functions
 
+  public function timeoutChecker($io)
+  {
+    $this->assertEquals(100, $io->getTimeout());
+    $io->setTimeout(120);
+    $this->assertEquals(120, $io->getTimeout());
+  }
 
   public function invalidRequest($io)
   {
@@ -178,6 +215,9 @@ class IoTest extends BaseTest
 
   public function responseChecker($io)
   {
+    $curlVer = curl_version();
+    $hasQuirk = $curlVer['version_number'] < Google_IO_Curl::NO_QUIRK_VERSION;
+
     $rawHeaders = "HTTP/1.1 200 OK\r\n"
         . "Expires: Sun, 22 Jan 2012 09:00:56 GMT\r\n"
         . "Date: Sun, 22 Jan 2012 09:00:56 GMT\r\n"
@@ -197,13 +237,18 @@ class IoTest extends BaseTest
     $this->assertEquals(null, json_decode($body, true));
 
     // Test transforms from proxies.
-    $rawHeaders = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n";
-    $size = strlen($rawHeaders);
+    $rawHeaders = Google_IO_Abstract::CONNECTION_ESTABLISHED
+        . "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n";
+    $headersSize = strlen($rawHeaders);
+    // If we have a broken cURL version we have to simulate it to get the
+    // correct test result.
+    if ($hasQuirk && get_class($io) === 'Google_IO_Curl') {
+        $headersSize -= strlen(Google_IO_Abstract::CONNECTION_ESTABLISHED);
+    }
     $rawBody = "{}";
 
-    $rawResponse = Google_IO_Abstract::CONNECTION_ESTABLISHED
-          . "$rawHeaders\r\n$rawBody";
-    list($headers, $body) = $io->parseHttpResponse($rawResponse, $size);
+    $rawResponse = "$rawHeaders\r\n$rawBody";
+    list($headers, $body) = $io->parseHttpResponse($rawResponse, $headersSize);
     $this->assertEquals(1, sizeof($headers));
     $this->assertEquals(array(), json_decode($body, true));
   }
